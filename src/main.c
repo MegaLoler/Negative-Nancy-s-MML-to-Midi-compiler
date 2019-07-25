@@ -146,7 +146,7 @@ void read_note (FILE *in_stream, FILE *out_stream, int channel, int note, int oc
     note_on (out_stream, 0, channel, value, velocity);
     int delta_time = get_delta_time (length);
     *tick += delta_time;
-    note_off (out_stream, delta_time, value, note, 0);
+    note_off (out_stream, delta_time, channel, value, velocity);
 }
 
 // read the rest of the line
