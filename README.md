@@ -27,6 +27,7 @@ Then there are *commands* and there are *notes*.
 
 The notes are: `c`, `d`, `e`, `f`, `g`, `a`, and `b`. Add a `+` or `-` directly after them to sharpen or flatten respectively: `f+` means F sharp, and `d--` means D double flat!
 Actually, there's one more, but it's not really a note, and more like the *lack* of a note, lol, it's the rest: `r`
+Also, if you put a number directly after a note, you can multiply its length. If you precede that number with a `/` you can divide the length instead.
 
 A command is a single character followed by a comma separated list of numbers as arguments. (If there is only one argument, there's no comma!) For example: `T80` is the command to set the tempo to 80 bpm, and `$1,127` is the command to send a midi controller message to controller number 1 with value 127!
 

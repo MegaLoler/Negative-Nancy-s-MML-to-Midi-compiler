@@ -1,5 +1,5 @@
 ; set the tempo to 80 bpm at the beginnng
-t0 T80
+t0 T60
 
 
 
@@ -7,10 +7,10 @@ t0 T80
 ; twinkle twinkle little start, how i wonder what you are
 
 ; start playing the melody at the beginning
-t0 c0 o4 l8 v80 ccggaag2 ffeeddc2
+t0 C0 o4 l8 v80 ccggaag2 ffeeddc2
 
 ; start playing the accompaniment line at the beginning
-t0 c1 o2 l8 v80 c>cecfcec d<b>c<afg>c<c
+t0 C1 o2 l8 v80 c>cecfcec d<b>c<afg>c<c
 
 
 
@@ -21,7 +21,7 @@ t0 c1 o2 l8 v80 c>cecfcec d<b>c<afg>c<c
 m0
 
 ; play the second part of the melody
-c0 o4 l8 v80 {ggffeed2}
+C0 o4 l8 v80 {ggffeed2}
 
 ; jump back to the beginning of the second part and play the accompaniment line
-M0 c1 o3 l8 v80 {e<g>d<g>c<gbg}
+M0 C1 o3 l8 v80 {e<g>d<g>c<gbg}
