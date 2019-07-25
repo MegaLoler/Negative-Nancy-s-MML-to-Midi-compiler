@@ -45,8 +45,8 @@ Here's a table of all the commands:
 | `<`     |               |            | `<`     | Decrease the active octave by one.                                                                     |
 | `l`     | Note value    |            | `l8`    | Set the rhythmic note value for notes entered hereafter.                                               |
 | `v`     | Velocity      |            | `v127`  | Set the note velocity for notes entered hereafter.                                                     |
-| `$`     | Controller ID | Value      | `$1,80  | Send the given MIDI controller a given value                                                           |
-| `m`     | Label ID      |            | `m0     | Mark the current time tick so you might return to it later                                             |
+| `$`     | Controller ID | Value      | `$1,80` | Send the given MIDI controller a given value                                                           |
+| `m`     | Label ID      |            | `m0`    | Mark the current time tick so you might return to it later                                             |
 | `M`     | Label ID      |            | `M0`    | Set the current time tick to a previously marked tick                                                  |
 
 Anything you put in between `[` and `]` gets played at the same time, like a chord!
