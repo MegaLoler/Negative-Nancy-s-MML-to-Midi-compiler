@@ -2,6 +2,8 @@
 
 Just another MML to MIDI compiler!  Just because I haven't found anything that's quite what I want, so I'm making my own, ya know? ;o
 
+It's a work in progress, I just started!!! Most of this readme is just what the goal is, rather than what things are right now, lol.
+
 ## How to build
 
 Just run `make` to produce `build/nnmmlc`!
