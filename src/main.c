@@ -15,11 +15,15 @@ int get_delta_time (float length) {
 
 // print a number in variable length format
 void print_variable_length (FILE *stream, uint32_t value) {
-    // TODO: this should be big endian insteadd i think lol
-    do {
-        fputc (value & 0x7f, stream);
-        value >>= 7;
-    } while (value & 0x80);
+    // figure out how many bytes it is
+    int length = 1;
+    int copy = value;
+    while (copy >>= 7)
+        length++;
+
+    // now put the bytes
+    while (length--)
+        fputc (((value >> (7 * length)) & 0x7f) | (length ? 0x80 : 0), stream);
 }
 
 void print_chars (FILE *stream, int length, char *data) {
