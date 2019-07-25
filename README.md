@@ -51,7 +51,7 @@ Here's a table of all the commands:
 
 Anything you put in between `[` and `]` gets played at the same time, like a chord!
 
-Then anything you put in between `(` and `)` gets crammed into the time space of a single note. For example, `l4 cc{dddd}d` will play two quarter note Cs followed by 4 sixteenth note Ds and finally a quarter note D.
+Then anything you put in between `(` and `)` gets crammed into the time space of a single note. For example, `l4 cc(dddd)d` will play two quarter note Cs followed by 4 sixteenth note Ds and finally a quarter note D.
 
 And anything between `{` and `}` gets repeated!
 
