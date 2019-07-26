@@ -5,7 +5,7 @@ EXAMPLE_PATH ::= examples
 INSTALL_PATH ::= /usr/bin
 
 # programs
-CC           ::= gcc -I$(SRC_PATH) -Wall -Og -g
+CC           ::= g++ -I$(SRC_PATH) -Wall -Og -g
 DEBUGGER     ::= gdb
 PLAYER       ::= timidity
 
@@ -19,8 +19,8 @@ all: $(TARGET)
 $(TARGET): $(BUILD_PATH)/main.o
 	$(CC) $(BUILD_PATH)/main.o -o $(TARGET)
 
-$(BUILD_PATH)/main.o: $(BUILD_PATH) $(SRC_PATH)/main.c
-	$(CC) -c $(SRC_PATH)/main.c -o $(BUILD_PATH)/main.o
+$(BUILD_PATH)/main.o: $(BUILD_PATH) $(SRC_PATH)/main.cpp
+	$(CC) -c $(SRC_PATH)/main.cpp -o $(BUILD_PATH)/main.o
 
 .PHONY:
 $(BUILD_PATH):
