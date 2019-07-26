@@ -62,7 +62,7 @@ And anything between `{` and `}` gets repeated! Place a `|` somewhere inside to 
 
 ## Todo list
 
-- Timing scopes
-- Multi-repeats with variable endings
 - Make nesting [] and () and {} work
-- Make an actual proper nice parser instead of THIS GARBAGE LOL
+    - Make an actual proper nice parser instead of THIS GARBAGE LOL
+- Interpolation
+- Hex value support
