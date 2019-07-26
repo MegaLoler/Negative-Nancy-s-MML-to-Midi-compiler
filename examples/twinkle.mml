@@ -1,6 +1,12 @@
 ; set the tempo to 80 bpm at the beginnng
 t0 T60
 
+; set melody channel to violin
+C0 @40
+
+; set bass channel to piano
+C1 @0
+
 
 
 ;;; first part

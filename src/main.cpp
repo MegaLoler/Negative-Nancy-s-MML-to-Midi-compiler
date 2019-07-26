@@ -121,6 +121,23 @@ class ControllerEvent : public MidiEvent {
         }
 };
 
+// midi program change event
+class ProgramChangeEvent : public MidiEvent {
+    private:
+        uint8_t channel;
+        uint8_t program_id;
+
+    public:
+        ProgramChangeEvent (int tick, uint8_t channel, uint8_t program_id)
+            : MidiEvent (tick), channel (channel), program_id (program_id) {}
+        ~ProgramChangeEvent () {}
+
+        void write (ostream &stream) {
+            stream << (char) (0xc0 | (channel & 0x0f));
+            stream << (char) (program_id & 0x7f);
+        }
+};
+
 // set tempo event
 class TempoEvent : public MidiEvent {
     private:
@@ -315,6 +332,11 @@ void compile (istream &stream, MidiFile &midi_file, int max_markers = 256) {
             case 'v':
                 // set velocity
                 stream >> velocity;
+                break;
+            case '@':
+                // send program change command
+                stream >> temp1;
+                midi_file.push (new ProgramChangeEvent (tick, channel, temp1));
                 break;
             case '$':
                 // send midi controller message
