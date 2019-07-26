@@ -198,6 +198,12 @@ class MidiFile {
                 event->write (data);
             }
 
+            // write end of track
+            data << (char) 0x00;
+            data << (char) 0xff;
+            data << (char) 0x2f;
+            data << (char) 0x00;
+
             // then write a track chunk with that buffer
             chunk (stream, "MTrk", data.str ());
         }
@@ -223,12 +229,6 @@ class MidiFile {
 
             // then write the track chunk with all the event data
             track (stream, events);
-
-            // write end of track message
-            stream << (char) 0x00;
-            stream << (char) 0xff;
-            stream << (char) 0x2f;
-            stream << (char) 0x00;
         }
 
         // add a midi event
