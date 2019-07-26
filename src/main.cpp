@@ -228,7 +228,7 @@ void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int
                 stream.get ();
                 break;
             case '-':
-                value++;
+                value--;
                 stream.get ();
                 break;
             case '/':
@@ -244,6 +244,7 @@ void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int
                     length /= read;
                 done = 1;
         }
+        stream.clear ();
     }
 
     // push the note on event
