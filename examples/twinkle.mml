@@ -12,7 +12,8 @@ C0 $10,0
 C1 $10,127
 
 ; stupid intro to show chords and velocity changes lol
-C1 o4 l8 v110 [eg] v90 [df] v80 [ce] v60 [<b>d]
+; and the lil restaroo
+C1 o4 l8 v110 [eg] v90 l16 [df]rl8 v80 [ce] v60 [<b>d]
 
 { ; going to repeat the whole thing
 

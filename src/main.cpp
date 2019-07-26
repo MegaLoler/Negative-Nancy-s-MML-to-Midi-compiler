@@ -465,6 +465,15 @@ void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, b
             case 'b':
                 read_note (stream, midi_file, channel, 11, octave, velocity, length, &tick, chord);
                 break;
+            case 'r':
+                // rest!!!
+                // attempt to read rhymic multiplier 
+                stream >> temp1;
+                if (!stream.good ())
+                    temp1 = 1;  // no multiplier by default
+                stream.clear ();
+                tick += midi_file.get_delta_time (length / temp1);
+                break;
         }
     }
 }
