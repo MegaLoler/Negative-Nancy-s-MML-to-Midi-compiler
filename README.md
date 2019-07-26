@@ -54,7 +54,7 @@ Anything you put in between `[` and `]` gets played at the same time, like a cho
 
 Then anything you put in between `(` and `)` gets crammed into the time space of a single note. For example, `l4 cc(dddd)d` will play two quarter note Cs followed by 4 sixteenth note Ds and finally a quarter note D.
 
-And anything between `{` and `}` gets repeated!
+And anything between `{` and `}` gets repeated! Place a `|` somewhere inside to mark the end of the last repeat! If you include a number directly after the `{` like `{4`, you can specify how many times to repeat! (Otherwise it will just repeat twice.)
 
 ## Todo list
 
