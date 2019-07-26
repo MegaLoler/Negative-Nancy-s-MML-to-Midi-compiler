@@ -275,8 +275,7 @@ void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int
 }
 
 // read the rest of the line
-// NOTE: this function has very sketchy behaviour
-inline void consume_until (istream &stream, const char until) {
+void consume_until (istream &stream, const char until) {
     char c;
     while ((c = stream.get ()) != until) {}
 }
@@ -287,11 +286,12 @@ void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, b
     int markers[max_markers];   // tick markers
 
     // get the next char
-    int temp1, temp2;
+    int temp1, temp2, temp3, temp4;
     char c;
     while ((c = stream.get ()) != EOF) {
         switch (c) {
             case '{':
+                // TODO: rewrite this garbage
                 // start of repeat
                 // see how many times to repeat
                 // try to read a repeat count if possible
@@ -302,18 +302,20 @@ void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, b
                 // save the read point
                 temp2 = stream.tellg ();
                 for (int i = 0; i < temp1; i++) {
+                    temp3 = i == (temp1 - 1);
                     stream.seekg (temp2);
-                    compile (stream, midi_file, tick, tick, i == (temp1 - 1),
+                    compile (stream, midi_file, tick, tick, temp3,
                              channel, octave, length, velocity, max_markers);
+                    if (temp3)      // on last repeat
+                        stream.seekg (temp4);
+                    else
+                        temp4 = stream.tellg ();
                 }
                 break;
             case '|':
                 // end of repeat if its the last repeat
-                if (final_repeat) {
-                    consume_until (stream, '}');
-                    // NOTE: this is dangerous if a comment contains a '}'
+                if (final_repeat)
                     return;
-                }
                 break;
             case '}':
                 // end of repeat

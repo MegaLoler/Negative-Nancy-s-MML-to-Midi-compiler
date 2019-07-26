@@ -5,7 +5,7 @@ EXAMPLE_PATH ::= examples
 INSTALL_PATH ::= /usr/bin
 
 # programs
-CC           ::= g++ -I$(SRC_PATH) -Wall -Og -g
+CC           ::= g++ -I$(SRC_PATH) -Wall -g
 DEBUGGER     ::= gdb
 PLAYER       ::= timidity
 
