@@ -2,7 +2,11 @@
 
 Just another MML to MIDI compiler!  Just because I haven't found anything that's quite what I want, so I'm making my own, ya know? ;o
 
-It's a work in progress, I just started!!! Most of this readme is just what the goal is, rather than what things are right now, lol.
+It seems currently functional (though hasn't been tested much), but the parser is total garbage, should rewrite it!!!!
+
+but, worning, Nesting {} () and [] do NOT (probably) WORK RIGHT NOW!!!!! AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa (becaues the parser is terrible)
+
+and u shouldnt use ANYTHING but NOTES inside () lol....... ik, its BAD, REALLY BAD, ill do it properly some time
 
 ## How to build
 
@@ -60,4 +64,5 @@ And anything between `{` and `}` gets repeated! Place a `|` somewhere inside to 
 
 - Timing scopes
 - Multi-repeats with variable endings
-- Make [] and () and {} work 
+- Make nesting [] and () and {} work
+- Make an actual proper nice parser instead of THIS GARBAGE LOL

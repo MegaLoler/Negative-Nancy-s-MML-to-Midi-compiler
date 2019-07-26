@@ -210,6 +210,11 @@ class MidiFile {
             }
         }
 
+        // return how many events are currently collected
+        int size () {
+            return events.size ();
+        }
+
         // write the midi file out to a stream
         void write (ostream &stream) {
 
@@ -232,7 +237,7 @@ class MidiFile {
 };
 
 // read the rest of a note after the note name
-void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int octave, int velocity, float length, int *tick) {
+void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int octave, int velocity, float length, int *tick, bool chord) {
     int value = note + 12 * (octave + 1);
     int read;
     int done = 0;
@@ -268,28 +273,87 @@ void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int
     midi_file.push (new NoteOnEvent (*tick, channel, value, velocity));
 
     // increment the tick by delta time
-    *tick += midi_file.get_delta_time (length);
+    int delta_time = midi_file.get_delta_time (length);
+    *tick += delta_time;
 
     // and store the note off event there
     midi_file.push (new NoteOffEvent (*tick, channel, value, velocity));
+
+    // if its a chord put the tick back to the beginning
+    if (chord)
+        *tick -= delta_time;
 }
 
 // read the rest of the line
 void consume_until (istream &stream, const char until) {
     char c;
-    while ((c = stream.get ()) != until) {}
+    do {
+        c = stream.get ();
+    } while (c != until);
 }
 
 // the top level compile function
-void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, bool final_repeat = false, int channel = 0, int octave = 4, float length = 4, int velocity = 80, int max_markers = 256) {
+void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, bool final_repeat = false, bool chord = false, int channel = 0, int octave = 4, float length = 4, int velocity = 80, int max_markers = 256) {
 
     int markers[max_markers];   // tick markers
+
+    // temp stuff for awful coding
+    MidiFile awful (0);
 
     // get the next char
     int temp1, temp2, temp3, temp4;
     char c;
     while ((c = stream.get ()) != EOF) {
         switch (c) {
+            case '(':
+                // TODO: rewrite this garbage
+                // start of a cram sequence
+                // save start position
+                temp2 = stream.tellg ();
+                // seek to end
+                consume_until (stream, ')');
+                // attempt to read rhymic multiplier 
+                stream >> temp1;
+                if (!stream.good ())
+                    temp1 = 1;  // no multiplier by default
+                stream.clear ();
+                // seek back to beginning
+                stream.seekg (temp2);
+                // now... figure out how many dang notes there are!!
+                // using this ABSOLUTEL AWFUL METHOD
+                temp3 = 0;
+                compile (cin, awful, temp3, 0);
+                temp3 = awful.size () / 2; // bc note offs........
+                // seek back to beginning
+                stream.seekg (temp2);
+                // and nowe.... get em for real
+                compile (stream, midi_file, tick, tick, final_repeat, chord,
+                         channel, octave, temp1 * length * temp3, velocity, max_markers);
+                break;
+            case ')':
+                // end of cram sequence
+                return;
+            case '[':
+                // start of chord
+                // save start position
+                temp2 = stream.tellg ();
+                // seek to end
+                consume_until (stream, ']');
+                // now attempt to read a rhythmic value at teh end of this chord
+                stream >> temp1;
+                if (!stream.good ())
+                    temp1 = 1;  // no multiplier by default
+                stream.clear ();
+                // seek back to beginning
+                stream.seekg (temp2);
+                compile (stream, midi_file, tick, tick, final_repeat, true,
+                         channel, octave, length / temp1, velocity, max_markers);
+                // and move the tick back to the end
+                tick += midi_file.get_delta_time (length / temp1);
+                break;
+            case ']':
+                // end of chord
+                return;
             case '{':
                 // TODO: rewrite this garbage
                 // start of repeat
@@ -304,7 +368,7 @@ void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, b
                 for (int i = 0; i < temp1; i++) {
                     temp3 = i == (temp1 - 1);
                     stream.seekg (temp2);
-                    compile (stream, midi_file, tick, tick, temp3,
+                    compile (stream, midi_file, tick, tick, temp3, chord,
                              channel, octave, length, velocity, max_markers);
                     if (temp3)      // on last repeat
                         stream.seekg (temp4);
@@ -312,14 +376,14 @@ void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, b
                         temp4 = stream.tellg ();
                 }
                 break;
+            case '}':
+                // end of repeat
+                return;
             case '|':
                 // end of repeat if its the last repeat
                 if (final_repeat)
                     return;
                 break;
-            case '}':
-                // end of repeat
-                return;
             case ';':
                 // comment
                 consume_until (stream, '\n');
@@ -381,25 +445,25 @@ void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, b
                 tick = markers[temp1];
                 break;
             case 'c':
-                read_note (stream, midi_file, channel, 0, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 0, octave, velocity, length, &tick, chord);
                 break;
             case 'd':
-                read_note (stream, midi_file, channel, 2, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 2, octave, velocity, length, &tick, chord);
                 break;
             case 'e':
-                read_note (stream, midi_file, channel, 4, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 4, octave, velocity, length, &tick, chord);
                 break;
             case 'f':
-                read_note (stream, midi_file, channel, 5, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 5, octave, velocity, length, &tick, chord);
                 break;
             case 'g':
-                read_note (stream, midi_file, channel, 7, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 7, octave, velocity, length, &tick, chord);
                 break;
             case 'a':
-                read_note (stream, midi_file, channel, 9, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 9, octave, velocity, length, &tick, chord);
                 break;
             case 'b':
-                read_note (stream, midi_file, channel, 11, octave, velocity, length, &tick);
+                read_note (stream, midi_file, channel, 11, octave, velocity, length, &tick, chord);
                 break;
         }
     }

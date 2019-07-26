@@ -1,11 +1,14 @@
 ; set the tempo to 60 bpm at the beginnng
 t0 T60
 
-; set melody channel to violin
+; set channel 0 to violin
 C0 @40
 
-; set bass channel to piano
+; set channel 1 to piano
 C1 @0
+
+; stupid intro to show chords and velocity changes lol
+C1 o4 l8 v110 [eg] v90 [df] v80 [ce] v60 [<b>d]
 
 { ; going to repeat the whole thing
 
@@ -13,7 +16,7 @@ C1 @0
     ; twinkle twinkle little start, how i wonder what you are
 
     ; start playing the melody at the beginning
-    t0 C0 o4 l8 v80 ccggaag2 ffeeddc2
+    t0 C0 o4 l8 v80 ccggaag2 f(fed)eeddc2
 
     ; start playing the accompaniment line at the beginning
     t0 C1 o2 l8 v80 c>cecfcec d<b>c<afg>c<c

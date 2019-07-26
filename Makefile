@@ -38,3 +38,7 @@ test: $(TARGET)
 .PHONY:
 debug: $(TARGET)
 	$(DEBUGGER) $(TARGET)
+
+.PHONY:
+install: $(TARGET)
+	cp $(TARGET) $(INSTALL_PATH)
