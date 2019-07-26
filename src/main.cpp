@@ -275,30 +275,52 @@ void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int
 }
 
 // read the rest of the line
-void consume_line (istream &stream) {
+// NOTE: this function has very sketchy behaviour
+inline void consume_until (istream &stream, const char until) {
     char c;
-    while ((c = stream.get ()) != '\n') {}
+    while ((c = stream.get ()) != until) {}
 }
 
 // the top level compile function
-void compile (istream &stream, MidiFile &midi_file, int max_markers = 256) {
+void compile (istream &stream, MidiFile &midi_file, int &tick, int offset = 0, bool final_repeat = false, int channel = 0, int octave = 4, float length = 4, int velocity = 80, int max_markers = 256) {
 
     int markers[max_markers];   // tick markers
 
-    int tick = 0;       // current time tick
-    int channel = 0;    // current midi channel
-    int octave = 4;     // current octave
-    float length = 4;     // current rhythmic note value
-    int velocity = 80;  // current note velocity
-    
     // get the next char
     int temp1, temp2;
     char c;
     while ((c = stream.get ()) != EOF) {
         switch (c) {
+            case '{':
+                // start of repeat
+                // see how many times to repeat
+                // try to read a repeat count if possible
+                stream >> temp1;
+                if (!stream.good ())
+                    temp1 = 2;  // repeat twice by default
+                stream.clear ();
+                // save the read point
+                temp2 = stream.tellg ();
+                for (int i = 0; i < temp1; i++) {
+                    stream.seekg (temp2);
+                    compile (stream, midi_file, tick, tick, i == (temp1 - 1),
+                             channel, octave, length, velocity, max_markers);
+                }
+                break;
+            case '|':
+                // end of repeat if its the last repeat
+                if (final_repeat) {
+                    consume_until (stream, '}');
+                    // NOTE: this is dangerous if a comment contains a '}'
+                    return;
+                }
+                break;
+            case '}':
+                // end of repeat
+                return;
             case ';':
                 // comment
-                consume_line (stream);
+                consume_until (stream, '\n');
                 break;
             case 'T':
                 // set bpm
@@ -308,6 +330,7 @@ void compile (istream &stream, MidiFile &midi_file, int max_markers = 256) {
             case 't':
                 // set tick
                 stream >> tick;
+                tick += offset;
                 break;
             case 'C':
                 // set channel
@@ -400,7 +423,8 @@ int main (int argc, char **argv) {
     MidiFile midi_file (division);
 
     // compile the source
-    compile (cin, midi_file);
+    int tick = 0;
+    compile (cin, midi_file, tick, tick);
 
     // write the file out
     midi_file.write (cout);

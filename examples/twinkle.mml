@@ -1,4 +1,4 @@
-; set the tempo to 80 bpm at the beginnng
+; set the tempo to 60 bpm at the beginnng
 t0 T60
 
 ; set melody channel to violin
@@ -7,27 +7,29 @@ C0 @40
 ; set bass channel to piano
 C1 @0
 
+{ ; going to repeat the whole thing
 
+    ;;; first part
+    ; twinkle twinkle little start, how i wonder what you are
 
-;;; first part
-; twinkle twinkle little start, how i wonder what you are
+    ; start playing the melody at the beginning
+    t0 C0 o4 l8 v80 ccggaag2 ffeeddc2
 
-; start playing the melody at the beginning
-t0 C0 o4 l8 v80 ccggaag2 ffeeddc2
+    ; start playing the accompaniment line at the beginning
+    t0 C1 o2 l8 v80 c>cecfcec d<b>c<afg>c<c
 
-; start playing the accompaniment line at the beginning
-t0 C1 o2 l8 v80 c>cecfcec d<b>c<afg>c<c
+| ; this marks the end on the last repeat
 
+    ;;; second part
+    ; like a diamond in the sky, up adove the world so high
 
+    ; mark this time for future reference
+    m0
 
-;;; second part
-; like a diamond in the sky, up adove the world so high
+    ; play the second part of the melody
+    C0 o4 l8 v80 {ggffeed2}
 
-; mark this time for future reference
-m0
+    ; jump back to the beginning of the second part and play the accompaniment line
+    M0 C1 o3 l8 v80 {e<g>d<g>c<gbg}
 
-; play the second part of the melody
-C0 o4 l8 v80 {ggffeed2}
-
-; jump back to the beginning of the second part and play the accompaniment line
-M0 C1 o3 l8 v80 {e<g>d<g>c<gbg}
+} ; repeat from the beginning
