@@ -223,6 +223,12 @@ class MidiFile {
 
             // then write the track chunk with all the event data
             track (stream, events);
+
+            // write end of track message
+            stream << (char) 0x00;
+            stream << (char) 0xff;
+            stream << (char) 0x2f;
+            stream << (char) 0x00;
         }
 
         // add a midi event
@@ -277,7 +283,8 @@ void read_note (istream &stream, MidiFile &midi_file, int channel, int note, int
     *tick += delta_time;
 
     // and store the note off event there
-    midi_file.push (new NoteOffEvent (*tick, channel, value, velocity));
+    //midi_file.push (new NoteOffEvent (*tick, channel, value, velocity));
+    midi_file.push (new NoteOffEvent (*tick, channel, value, 0));
 
     // if its a chord put the tick back to the beginning
     if (chord)
