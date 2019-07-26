@@ -7,6 +7,10 @@ C0 @40
 ; set channel 1 to piano
 C1 @0
 
+; set panning
+C0 $10,0
+C1 $10,127
+
 ; stupid intro to show chords and velocity changes lol
 C1 o4 l8 v110 [eg] v90 [df] v80 [ce] v60 [<b>d]
 

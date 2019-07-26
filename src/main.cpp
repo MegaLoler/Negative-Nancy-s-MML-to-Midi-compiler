@@ -115,7 +115,7 @@ class ControllerEvent : public MidiEvent {
         ~ControllerEvent () {}
 
         void write (ostream &stream) {
-            stream << (char) (0xe0 | (channel & 0x0f));
+            stream << (char) (0xb0 | (channel & 0x0f));
             stream << (char) (controller & 0x7f);
             stream << (char) (value & 0x7f);
         }
